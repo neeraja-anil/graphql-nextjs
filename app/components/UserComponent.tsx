@@ -26,8 +26,9 @@ export default function UserComponent() {
     console.log(users)
     return (
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg m-4 flex flex-col items-center">
-            <h1 className="text-lg text-gray-500 mb-6"> USER DATA</h1>
-            <UserTableComponent users={users} />
+            {/* <h1 className="text-lg text-gray-500 mb-6"> USER DATA</h1> */}
+            {/* <UserTableComponent users={users} /> */}
+            <TableUsingAntd users={users} />
         </div>
     )
 }
