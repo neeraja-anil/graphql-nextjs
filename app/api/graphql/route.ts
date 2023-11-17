@@ -2,19 +2,23 @@ import { ApolloServer } from '@apollo/server'
 import { startServerAndCreateNextHandler } from '@as-integrations/next'
 import { gql } from 'graphql-tag'
 import { NextRequest } from 'next/server'
+import { skip } from 'node:test';
 
 interface User {
     id: string;
     firstName: string;
     lastName: string;
     email: string;
+    age: number;
+    username: string;
 }
 
 
 const resolvers = {
     Query: {
-        getUsers: async () => {
-            const dummyUrl = 'https://dummyjson.com/users'
+        getUsers: async (_: any, { currentPage }: { currentPage: number }) => {
+            let skip = (currentPage - 1) * 10;
+            const dummyUrl = `https://dummyjson.com/users?limit=10&skip=${skip}`
             const response = await fetch(dummyUrl)
             const data = await response.json();
             const users: Array<User> = data.users.map((user: User) => ({
@@ -22,21 +26,25 @@ const resolvers = {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
+                age: user.age,
+                username: user.username
             }));
             return users
         }
     }
 }
+
 const typeDefs = gql`
     type User {
         id:ID,
         firstName:String,
         lastName:String,
         email:String,
-
+        age:Int,
+        username:String
     }
     type Query {
-        getUsers : [User]
+        getUsers(currentPage:Int) : [User]
     }`
 
 const server = new ApolloServer({
