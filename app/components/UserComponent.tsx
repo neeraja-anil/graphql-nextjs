@@ -1,10 +1,9 @@
 "use client";
 const dynamic = "force-dynamic";
 
-import React, { Suspense, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { gql, useLazyQuery } from "@apollo/client";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
-import UserTableComponent from "./UserTableComponent";
 import TableUsingAntd from "./TableUsingAntd";
 
 interface data {
@@ -38,9 +37,9 @@ export default function UserComponent() {
       currentPage,
     },
   });
+
   if (error) return `Error! ${error.message}`;
   const users = data?.getUsers;
-  console.log(loading);
 
   useEffect(() => {
     getUsers();

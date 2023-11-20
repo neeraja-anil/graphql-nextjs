@@ -2,7 +2,6 @@ import { ApolloServer } from '@apollo/server'
 import { startServerAndCreateNextHandler } from '@as-integrations/next'
 import { gql } from 'graphql-tag'
 import { NextRequest } from 'next/server'
-import { skip } from 'node:test';
 
 interface User {
     id: string;
