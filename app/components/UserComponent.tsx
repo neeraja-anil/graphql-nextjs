@@ -3,8 +3,10 @@ const dynamic = "force-dynamic";
 
 import React, { useState, useEffect } from "react";
 import { gql, useLazyQuery } from "@apollo/client";
+import { Button } from "antd";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 import TableUsingAntd from "./TableUsingAntd";
+import { generateReport } from "../../report/GenerateReport";
 
 interface data {
   getUsers: any;
@@ -40,13 +42,16 @@ export default function UserComponent() {
 
   if (error) return `Error! ${error.message}`;
   const users = data?.getUsers;
-
+  console.log(data);
   useEffect(() => {
     getUsers();
   }, [getUsers, currentPage]);
 
   return (
-    <div className="m-4">
+    <div className="m-4 space-y-1">
+      <Button type="default" onClick={() => generateReport()}>
+        Download
+      </Button>
       <TableUsingAntd
         users={users}
         setCurrentPage={setCurrentPage}
