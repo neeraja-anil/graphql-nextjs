@@ -15,9 +15,25 @@ interface User {
 
 const resolvers = {
     Query: {
-        getUsers: async (_: any, { currentPage }: { currentPage: number }) => {
-            let skip = (currentPage - 1) * 10;
-            const dummyUrl = `https://dummyjson.com/users?limit=10&skip=${skip}`
+        getUsers: async (_: any, { currentPage,pageSize }: { currentPage?: number,pageSize?:number}) => {
+            let skip = currentPage? (currentPage - 1) * 10:0
+            let limit = pageSize? 10 : 0
+            console.log(currentPage,pageSize)
+            const dummyUrl = `https://dummyjson.com/users${ currentPage && pageSize ? `?limit=${limit}&skip=${skip}` : ""}`
+            const response = await fetch(dummyUrl)
+            const data = await response.json();
+            const users: Array<User> = data.users.map((user: User) => ({
+                id: user.id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                age: user.age,
+                username: user.username
+            }));
+            return users
+        },
+        getAllUsers: async () => {
+            const dummyUrl = `https://dummyjson.com/users`
             const response = await fetch(dummyUrl)
             const data = await response.json();
             const users: Array<User> = data.users.map((user: User) => ({
@@ -30,7 +46,8 @@ const resolvers = {
             }));
             return users
         }
-    }
+    },
+    
 }
 
 const typeDefs = gql`
@@ -43,7 +60,8 @@ const typeDefs = gql`
         username:String
     }
     type Query {
-        getUsers(currentPage:Int) : [User]
+        getUsers(currentPage:Int,pageSize:Int) : [User]
+        getAllUsers:[User]
     }`
 
 const server = new ApolloServer({

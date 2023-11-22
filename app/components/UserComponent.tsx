@@ -13,8 +13,8 @@ interface data {
 }
 
 const query = gql`
-  query ($currentPage: Int) {
-    getUsers(currentPage: $currentPage) {
+  query ($currentPage: Int, $pageSize: Int) {
+    getUsers(currentPage: $currentPage, pageSize: $pageSize) {
       id
       firstName
       lastName
@@ -37,6 +37,7 @@ export default function UserComponent() {
     fetchPolicy: "no-cache",
     variables: {
       currentPage,
+      pageSize: 10,
     },
   });
 

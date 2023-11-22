@@ -9,8 +9,8 @@ const generateReport = async () => {
     },
   });
 
-  // // download the output to the file
-  // report.download(`myreport${Math.random()}.pdf`);
+  // download the output to the file
+  report.download(`myreport${Math.random()}.pdf`);
 
   // // open output in the new window
   // report.openInWindow({ title: "myreport" });
